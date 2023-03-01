@@ -3,17 +3,16 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 function Todo() {
-
-	const [store, setStore] = useLocalStorage([{ name: "hello", id: 1 }]);
-	const [counter, setCounter] = useState(2);
+  const [store, setStore] = useLocalStorage([{ name: "hello", id: 1 }]);
+  const [counter, setCounter] = useState(2);
 
   const [state, setState] = useState(store);
 
   const css = "";
   const input = useRef<HTMLInputElement>(null);
   const deleteBtn = useRef<HTMLButtonElement>(null);
-  
-	// const container = useRef<HTMLDivElement>(null);
+
+  // const container = useRef<HTMLDivElement>(null);
 
   // useEffect(() => {
   // 	container.current!.style.width = "20vw";
@@ -45,23 +44,20 @@ function Todo() {
 
     let value = input.current.value ?? "";
 
-		setCounter(counter+1);
+    setCounter(counter + 1);
 
-		const newRow = { name: value, id: counter };
+    const newRow = { name: value, id: counter };
 
-    setState((prevState) => [
-      ...prevState,
-      newRow,
-    ]);
-		
-		setStore([...store, newRow]);
+    setState((prevState) => [...prevState, newRow]);
+
+    setStore([...store, newRow]);
     input.current.value = "";
   }
 
   function removeItem(e: number) {
     const newState = state.filter((x) => x.id !== e);
     setState(newState);
-		setStore(newState);
+    setStore(newState);
   }
 
   return (

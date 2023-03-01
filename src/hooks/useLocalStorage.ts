@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 
-const list = "list;"
+const list = "list;";
 
 export default function useLocalStorage(value: any) {
+  const initValue = localStorage.getItem(list);
 
-    const initValue = localStorage.getItem(list);
-    
-    if(!initValue){
-        setState(value);
-    }
+  if (!initValue) {
+    setState(value);
+  }
 
-    const state = JSON.parse(localStorage.getItem(list) ?? "null");
+  const state = JSON.parse(localStorage.getItem(list) ?? "null");
 
-    return [state, setState];
+  return [state, setState];
 }
 
 function getSavedValue(key: string, initValue: unknown) {
@@ -29,5 +28,5 @@ function getSavedValue(key: string, initValue: unknown) {
 }
 
 function setState(state: any[]) {
-    localStorage.setItem(list, JSON.stringify(state));
+  localStorage.setItem(list, JSON.stringify(state));
 }
