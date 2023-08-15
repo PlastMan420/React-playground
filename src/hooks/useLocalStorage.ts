@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-
 const list = "list;";
 
+/**
+ * Saves state to local storage.
+ *
+*/
 export default function useLocalStorage(value: any) {
   const initValue = localStorage.getItem(list);
 

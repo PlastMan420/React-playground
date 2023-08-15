@@ -1,0 +1,13 @@
+.todo-severity{
+	&-high {
+		background-color: crimson;
+	}
+
+	&-medium{
+		background-color: yellow;
+	}
+
+	&-low{
+		background-color: blue;
+	}
+}

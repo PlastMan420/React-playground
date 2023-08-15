@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App d-flex justify-content-center">
       <Todo></Todo>
     </div>
   );

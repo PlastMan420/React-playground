@@ -1,39 +1,34 @@
-import React from "react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import { ToDoListRow } from "../../LocalTypes";
+import ToDoList from "./todoList";
+import { ePriority } from "../../enums";
 
 function Todo() {
-  const [store, setStore] = useLocalStorage([{ name: "hello", id: 1 }]);
-  const [counter, setCounter] = useState(2);
+  const [store, setStore] = useLocalStorage([
+    { name: "hello", id: 1, isDone: false, priority: ePriority.Low },
+  ] as ToDoListRow[]);
+  const [counter, setCounter] = useState<number>(2);
+  const [state, setState] = useState<ToDoListRow[]>(store);
 
-  const [state, setState] = useState(store);
-
-  const css = "";
   const input = useRef<HTMLInputElement>(null);
-  const deleteBtn = useRef<HTMLButtonElement>(null);
 
-  // const container = useRef<HTMLDivElement>(null);
+  function removeItem(e: number) {
+    const newState = state.filter((x: ToDoListRow) => x.id !== e) ?? null;
+    if (!newState) return;
 
-  // useEffect(() => {
-  // 	container.current!.style.width = "20vw";
-  // }), [container];
+    setState(newState);
+    setStore(newState);
+  }
 
-  const list = state.map((x) => {
-    return (
-      <li key={x.id}>
-        <div className="d-flex justify-content-between w-100">
-          <p>{x.name}</p>
-          <button
-            onClick={(e) => removeItem(x.id)}
-            value={x.id}
-            ref={deleteBtn}
-          >
-            X
-          </button>
-        </div>
-      </li>
-    );
-  });
+  function updatePriority(e: number, priority: ePriority | number) {
+    const newState = state.map((x) => {
+      return x.id === e ? { ...x, priority: priority } : x;
+    });
+
+    setState(newState);
+    setStore(newState);
+  }
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -46,7 +41,12 @@ function Todo() {
 
     setCounter(counter + 1);
 
-    const newRow = { name: value, id: counter };
+    const newRow: ToDoListRow = {
+      name: value,
+      id: counter,
+      isDone: false,
+      priority: ePriority.Low,
+    };
 
     setState((prevState) => [...prevState, newRow]);
 
@@ -54,35 +54,29 @@ function Todo() {
     input.current.value = "";
   }
 
-  function removeItem(e: number) {
-    const newState = state.filter((x) => x.id !== e);
-    setState(newState);
-    setStore(newState);
-  }
-
   return (
-    <React.Fragment>
-      <div style={{ width: "20vw" }}>
-        <form onSubmit={handleSubmit}>
-          <div className="form-floating mb-3">
-            <input
-              type="text"
-              className="form-control"
-              id="floatingInput"
-              placeholder="new item"
-              ref={input}
-            />
-            <label>new item</label>
-          </div>
-
-          <button type="submit">Add</button>
-        </form>
-
-        <div style={{ height: "50vh", overflowY: "scroll" }}>
-          <ul>{list}</ul>
+    <div style={{ width: "20vw" }}>
+      <form onSubmit={handleSubmit}>
+        <div className="form-floating mb-3">
+          <input
+            type="text"
+            className="form-control"
+            id="floatingInput"
+            placeholder="new item"
+            ref={input}
+          />
+          <label>new item</label>
         </div>
-      </div>
-    </React.Fragment>
+
+        <button type="submit">Add</button>
+      </form>
+
+      <ToDoList
+        list={state}
+        removeItemCallBack={removeItem}
+        updatePriorityCallBack={updatePriority}
+      />
+    </div>
   );
 }
 
